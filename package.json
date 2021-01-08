@@ -15,7 +15,8 @@
     "@ant-design/icons": "^4.3.0",
     "styled-components": "^5.2.1",
     "qrcode.react": "^1.0.1",
-    "react-color": "^2.19.3"
+    "react-color": "^2.19.3",
+    "react-device-detect": "^1.15.0"
   },
   "scripts": {
     "start": "react-scripts start",

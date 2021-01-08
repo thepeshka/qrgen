@@ -3,6 +3,10 @@ import React, {useEffect, useRef, useState} from "react";
 import QRCode from 'qrcode.react';
 import styled from "styled-components";
 import SaveQrModal from "../../views/saveQrModal";
+import {
+  isBrowser,
+  isMobile
+} from "react-device-detect";
 
 const {Option} = Select;
 
@@ -65,7 +69,7 @@ const QRForm = ({formData}) => {
   const [showSaveQrModal, setShowQrModal] = useState(false);
 
   return (<Row justify="center">
-      <Col span={12}>
+      <Col span={isMobile ? 24 : 12}>
         <Row gutter={16}>
           <Col flex="auto">
             <FormStyled
@@ -80,7 +84,7 @@ const QRForm = ({formData}) => {
               }
             </FormStyled>
           </Col>
-          <Col span={3} />
+          {isBrowser && <Col span={3} />}
           <Col flex="200px">
             <QRCodeStyled>
               <QRCode id="qr" includeMargin={true} value={renderer(state).slice(0, 23648)} size={200} />

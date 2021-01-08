@@ -21,13 +21,6 @@ const QRCodeWrapper = styled.div`
   justify-content: center;
 `;
 
-const generateAlphaNumeric = (length) => {
-  let result = '';
-  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
-  return result;
-}
-
 const SaveQrModal = ({qrData, onClose}) => {
   const [qrSettings, setQrSettings] = useState({
     size: 200,
@@ -87,7 +80,7 @@ const SaveQrModal = ({qrData, onClose}) => {
     const mimetype = {png: "image/png", jpg: "image/jpeg"}[imgFormat];
     const canvas = document.getElementById('qrCode');
     canvas.toBlob(function(blob) {
-      downloadBlob(blob, `qrgen_${generateAlphaNumeric(10)}.${imgFormat}`);
+      downloadBlob(blob, `qrgen_${Date.now()}.${imgFormat}`);
     }, mimetype, 1);
     onClose();
   }
@@ -96,7 +89,7 @@ const SaveQrModal = ({qrData, onClose}) => {
     const svgEl = document.getElementById('qrCode');
     const svg = "<svg xmlns=\"http://www.w3.org/2000/svg\"" + svgEl.outerHTML.slice(4)
     const blob = new Blob([svg], {type: 'image/svg+xml'});
-    downloadBlob(blob, `qrgen_${generateAlphaNumeric(10)}.${imgFormat}`);
+    downloadBlob(blob, `qrgen_${Date.now()}.${imgFormat}`);
   }
 
   const handleSave = () => {
