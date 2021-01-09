@@ -3,6 +3,11 @@ const escapeQr = (txt, chars = '\\;,:') => {
   return txt;
 }
 
+const protoUrl = (proto, path, args) => {
+  args = Object.entries(args).map(([name, val]) => `${name}=${val}`).join("&");
+  return encodeURI(`${proto}:${path}?${args}`);
+}
+
 const FormsData = {
   text: {
     name: "Text",
@@ -14,6 +19,60 @@ const FormsData = {
       }
     ],
     renderer: ({text}) => text
+  },
+  email: {
+    name: "Email",
+    fields: [
+      {
+        type: "array",
+        title: "To",
+        id: "to",
+        filterType: "email"
+      },
+      {
+        type: "array",
+        title: "Cc",
+        id: "cc",
+        filterType: "email"
+      },
+      {
+        type: "array",
+        title: "Bcc",
+        id: "bcc",
+        filterType: "email"
+      },
+      {
+        type: "text",
+        title: "Subject",
+        id: "subject",
+      },
+      {
+        type: "textArea",
+        title: "Body",
+        id: "body"
+      },
+    ],
+    renderer: ({to, cc, bcc, subject, body}) => protoUrl(
+      'mailto',
+      to.join(','),
+      {
+        cc: cc.join(','),
+        bcc: bcc.join(','),
+        subject,
+        body
+      }
+    )
+  },
+  phone: {
+    name: "Phone",
+    fields: [
+      {
+        id: "phone",
+        type: "phone",
+        title: "Number"
+      }
+    ],
+    renderer: ({phone}) => `tel:+${phone}`
   },
   wifi: {
     name: "Wi-Fi",
@@ -98,7 +157,28 @@ const FormsData = {
 
       return `WIFI:T:${auth};S:${ssid};${password}${eapMethod}${anonIdentity}${identity}${phase2}${hidden};`;
     }
-  }
+  },
+  custom: {
+    name: "Custom protocol",
+    fields: [
+      {
+        type: "text",
+        title: "Protocol",
+        id: "proto",
+      },
+      {
+        type: "text",
+        title: "Path",
+        id: "path",
+      },
+      {
+        type: "array",
+        title: "Arguments",
+        id: "args"
+      }
+    ],
+    renderer: ({proto, path, args}) => encodeURI(`${proto}:${path}?${args.join()}`)
+  },
 }
 
 export default FormsData;

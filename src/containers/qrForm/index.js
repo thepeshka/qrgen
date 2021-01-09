@@ -1,5 +1,5 @@
 import {Form, Input, Row, Col, Checkbox, Select, Button} from 'antd';
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import QRCode from 'qrcode.react';
 import styled from "styled-components";
 import SaveQrModal from "../../views/saveQrModal";
@@ -10,22 +10,42 @@ import {
 
 const {Option} = Select;
 
+const filtersMap = {
+  email: email => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  },
+  phone: phone => {
+    console.log(phone);
+    return Array.from(phone).filter(c => "123456789".includes(c)).join('')
+  }
+};
+
+const getFilter = (filterName) => {
+  if (filterName)
+    return filtersMap[filterName];
+  return () => true;
+}
+
 const fieldMap = {
   text: (formData, formState, {id, title, showIf = () => true}) => (
     showIf(formState) && <Form.Item name={id} label={title}>
-    <Input maxLength={100} />
+    <Input style={{width: "100%"}} maxLength={100} />
   </Form.Item>),
   textArea: (formData, formState, {id, title, showIf = () => true}) => (
     showIf(formState) && <Form.Item name={id} label={title}>
-      <Input.TextArea maxLength={2000} autoSize={{minRows: 2, maxRows: 10}} />
+      <Input.TextArea style={{width: "100%"}} maxLength={2000} autoSize={{minRows: 2, maxRows: 10}} />
     </Form.Item>),
   password: (formData, formState, {id, title, showIf = () => true}) => (
     showIf(formState) && <Form.Item name={id} label={title}>
-    <Input.Password maxLength={100} />
+    <Input.Password style={{width: "100%"}} maxLength={100} />
   </Form.Item>),
   choices: (formData, formState, {id, title, choices, form, showIf = () => true}) => (
     showIf(formState) && <Form.Item name={id} label={title}>
-    <Select onChange={v => form.setFieldsValue({[id]: v})}>
+    <Select
+      style={{width: "100%"}}
+      onChange={v => form.setFieldsValue({[id]: v})}
+    >
       {
         choices.map(({value, caption}, k) => <Option value={value} key={k}>{caption}</Option>)
       }
@@ -38,7 +58,26 @@ const fieldMap = {
       wrapperCol={{offset: 8, span: 16}}
     >
     <Checkbox>{title}</Checkbox>
-  </Form.Item>)
+  </Form.Item>),
+  array: (formData, formState, {id, title, form, filterType, showIf = () => true}) => (
+    showIf(formState) && <Form.Item name={id} label={title}>
+      <Select
+        style={{width: "100%"}}
+        mode="tags"
+        tokenSeparators={[',']}
+        onChange={v => form.setFieldsValue({[id]: v.filter(getFilter(filterType))})}
+        open={false}
+      />
+    </Form.Item>),
+  phone: (formData, formState, {id, title, showIf = () => true}) => (
+    showIf(formState) && <Form.Item name={id} label={title}>
+      <Input
+        maxLength={100}
+        style={{width: "100%"}}
+        onKeyPress={e => /\D/.test(String.fromCharCode(e.charCode)) && e.preventDefault()}
+        onPaste={e => !/\d+/.test(e.target.value) && e.preventDefault()}
+      />
+    </Form.Item>),
 };
 
 const fieldDefaultValueMap = {
@@ -46,7 +85,9 @@ const fieldDefaultValueMap = {
   textArea: () => "",
   password: () => "",
   choices: f => f.choices[0].value,
-  boolean: () => false
+  boolean: () => false,
+  array: () => [],
+  phone: () => null
 }
 
 const QRCodeStyled = styled.div`
