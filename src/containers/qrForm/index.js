@@ -87,7 +87,7 @@ const fieldDefaultValueMap = {
   choices: f => f.choices[0].value,
   boolean: () => false,
   array: () => [],
-  phone: () => null
+  phone: () => ""
 }
 
 const QRCodeStyled = styled.div`
