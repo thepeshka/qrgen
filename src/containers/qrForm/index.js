@@ -15,9 +15,15 @@ const filtersMap = {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   },
-  phone: phone => {
-    console.log(phone);
-    return Array.from(phone).filter(c => "123456789".includes(c)).join('')
+  phone: e => {
+    if (e.charCode) {
+      const char = String.fromCharCode(e.charCode)
+      if (e.target.value.length) {
+        return /\d/.test(char);
+      }
+      return char === '+' || /\d/.test(char);
+    }
+    return /\+?\d*/.test(e.target.value);
   }
 };
 
@@ -74,8 +80,8 @@ const fieldMap = {
       <Input
         maxLength={100}
         style={{width: "100%"}}
-        onKeyPress={e => /\D/.test(String.fromCharCode(e.charCode)) && e.preventDefault()}
-        onPaste={e => !/\d+/.test(e.target.value) && e.preventDefault()}
+        onKeyPress={e => !filtersMap.phone(e) && e.preventDefault()}
+        onPaste={e => !filtersMap.phone(e) && e.preventDefault()}
       />
     </Form.Item>),
 };
