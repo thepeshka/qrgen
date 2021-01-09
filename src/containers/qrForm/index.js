@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import QRCode from 'qrcode.react';
 import styled from "styled-components";
 import SaveQrModal from "../../views/saveQrModal";
+import QRGeneratorLayout from "../../views/qrGeneratorLayout";
 import {
   isBrowser,
   isMobile
@@ -115,7 +116,8 @@ const QRForm = ({formData}) => {
   const [state, setState] = useState(Object.fromEntries(fields.map(f => [f.id, fieldDefaultValueMap[f.type](f)])));
   const [showSaveQrModal, setShowQrModal] = useState(false);
 
-  return (<Row justify="center">
+  return (<QRGeneratorLayout>
+    <Row justify="center">
       <Col span={isMobile ? 24 : 12}>
         <Row gutter={16}>
           <Col flex="auto">
@@ -144,7 +146,8 @@ const QRForm = ({formData}) => {
           </Col>
         </Row>
       </Col>
-    </Row>);
+    </Row>
+  </QRGeneratorLayout>);
 };
 
 export default QRForm;

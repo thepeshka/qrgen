@@ -8,6 +8,7 @@ import {
   Route
 } from "react-router-dom";
 import FormsData from "./formsData";
+import AboutReadabilityPage from "./pages/aboutReadability";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
               <QRForm formData={form} />
             </Route>
           )}
+          <Route exact path="/aboutReadability">
+            <AboutReadabilityPage />
+          </Route>
         </Switch>
       </MainLayout>
     </Router>

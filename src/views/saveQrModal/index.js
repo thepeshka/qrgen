@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
-import { Modal, Form, InputNumber, Select, Row, Col, Input, Slider, Radio, Button, Checkbox } from 'antd';
+import { Modal, Form, InputNumber, Select, Radio, Button, Checkbox, Tag, Alert } from 'antd';
 import {CompactPicker} from 'react-color';
 import QRCode from 'qrcode.react';
 import styled from "styled-components";
+import {grayscaleVal, qrReadabilityLevel, warningTagColor} from "../../utils/color";
+import {QuestionCircleTwoTone} from "@ant-design/icons";
 
 const Option = Select.Option;
 
 const QRCodeStyled = styled.div`
   display: flex;
   box-shadow: 0 0 20px 0 #00000045;
-  margin: 0 auto 20px auto;
+  margin: 20px auto;
   height: 200px;
   width: 200px;
   justify-content: center;
   align-items: center;
+  
+  #qrCode {
+    max-width: 200px;
+    max-height: 200px;
+  }
 `;
 
 const QRCodeWrapper = styled.div`
@@ -41,7 +48,7 @@ const SaveQrModal = ({qrData, onClose}) => {
   const [imgFormat, setImgFormat] = useState('png');
 
   const qrCodeProps = {
-    size: qrSettings.size <= 200 ? qrSettings.size : 200,
+    size: qrSettings.size,
     includeMargin: qrSettings.includeMargin,
     bgColor: qrSettings.bgColor,
     fgColor: qrSettings.fgColor,
@@ -98,6 +105,8 @@ const SaveQrModal = ({qrData, onClose}) => {
 
   const [form] = Form.useForm();
 
+  const readabilityLevel = qrReadabilityLevel(qrSettings.fgColor, qrSettings.bgColor);
+
   return (
     <Modal
       title="Save QR code"
@@ -119,6 +128,19 @@ const SaveQrModal = ({qrData, onClose}) => {
         </Button>,
       ]}
     >
+      {(grayscaleVal(qrSettings.fgColor) > grayscaleVal(qrSettings.bgColor)) &&
+        <Alert
+          style={{marginBottom: 20}}
+          message="Some scanners may not be able to scan QR codes with dark background!"
+          type="warning"
+          showIcon
+        />
+      }
+      <div>
+        Readability level: <Tag style={{width: 70, textAlign: "center"}} color={warningTagColor(readabilityLevel)}>
+          {readabilityLevel.toFixed(2)}%
+      </Tag><a href="/aboutReadability" target="_blank"><QuestionCircleTwoTone /></a>
+      </div>
       <QRCodeWrapper>
         <QRCodeStyled>
           <QRCode id="qrCode" value={qrData} {...qrCodeProps}/>
