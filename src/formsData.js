@@ -68,7 +68,7 @@ const FormsData = {
     fields: [
       {
         id: "phone",
-        type: "phone",
+        type: "text",
         title: "Number"
       }
     ],
@@ -156,6 +156,88 @@ const FormsData = {
       eapMethod = eapMethod ? `E:${eapMethod};` : '';
 
       return `WIFI:T:${auth};S:${ssid};${password}${eapMethod}${anonIdentity}${identity}${phase2}${hidden};`;
+    }
+  },
+  vcard: {
+    name: "Contact",
+    fields: [
+      {
+        id: "name",
+        type: "text",
+        title: "Last name"
+      },
+      {
+        id: "fname",
+        type: "text",
+        title: "First name"
+      },
+      {
+        id: "org",
+        type: "text",
+        title: "Organization"
+      },
+      {
+        id: "email",
+        type: "text",
+        title: "Email"
+      },
+      {
+        id: "url",
+        type: "text",
+        title: "Website"
+      },
+      {
+        id: "cell",
+        type: "text",
+        title: "Cell"
+      },
+      {
+        id: "phone",
+        type: "text",
+        title: "Phone"
+      },
+      {
+        id: "fax",
+        type: "text",
+        title: "Fax"
+      },
+      {
+        id: "street",
+        type: "text",
+        title: "Street"
+      },
+      {
+        id: "city",
+        type: "text",
+        title: "City"
+      },
+      {
+        id: "region",
+        type: "text",
+        title: "Region"
+      },
+      {
+        id: "postcode",
+        type: "text",
+        title: "Postcode"
+      },
+      {
+        id: "country",
+        type: "text",
+        title: "Country"
+      },
+    ],
+    renderer: ({name, fname, org, email, url, cell, phone, fax, street, city, region, postcode, country}) => {
+      name = name.length || fname.length ? `N:${name};${fname}\n` : '';
+      org = org.length ? `ORG:${org}\n` : '';
+      email = email.length ? `EMAIL;TYPE=INTERNET:${email}\n` : '';
+      url = url.length ? `URL:${url}\n` : '';
+      cell = cell.length ? `TEL;TYPE=CELL:${cell}\n` : '';
+      phone = phone.length ? `TEL:${phone}\n` : '';
+      fax = fax.length ? `TEL;TYPE=FAX:${fax}\n` : '';
+      const adr = street.length || city.length || region.length || postcode.length || country.length
+        ? `ADR:;;${street};${city};${region};${postcode};${country}\n` :'';
+      return `BEGIN:VCARD\nVERSION:3.0\n${name}${org}${email}${url}${cell}${phone}${fax}${adr};END:VCARD`;
     }
   },
   custom: {

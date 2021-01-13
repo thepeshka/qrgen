@@ -5,6 +5,7 @@ import QRCode from 'qrcode.react';
 import styled from "styled-components";
 import {grayscaleVal, qrReadabilityLevel, warningTagColor} from "../../utils/color";
 import {QuestionCircleTwoTone} from "@ant-design/icons";
+import Style from "../../componenets/style";
 
 const Option = Select.Option;
 
@@ -115,11 +116,13 @@ const SaveQrModal = ({qrData, onClose}) => {
       onCancel={onClose}
       okText="Save"
       footer={[
-        <Radio.Group value={imgFormat} onChange={e => setImgFormat(e.target.value)}>
-          <Radio value="png">PNG</Radio>
-          <Radio value="jpg">JPG</Radio>
-          <Radio value="svg">SVG</Radio>
-        </Radio.Group>,
+        <Style position="absolute" left={16} bottom={15}>
+          <Radio.Group value={imgFormat} onChange={e => setImgFormat(e.target.value)}>
+            <Radio value="png">PNG</Radio>
+            <Radio value="jpg">JPG</Radio>
+            <Radio value="svg">SVG</Radio>
+          </Radio.Group>
+        </Style>,
         <Button key="back" onClick={onClose}>
           Cancel
         </Button>,
@@ -137,9 +140,12 @@ const SaveQrModal = ({qrData, onClose}) => {
         />
       }
       <div>
-        Readability level: <Tag style={{width: 70, textAlign: "center"}} color={warningTagColor(readabilityLevel)}>
-          {readabilityLevel.toFixed(2)}%
-      </Tag><a href="/aboutReadability" target="_blank"><QuestionCircleTwoTone /></a>
+        Readability level: <Style width={70} textAlign="center">
+          <Tag color={warningTagColor(readabilityLevel)}>
+              {readabilityLevel.toFixed(2)}%
+          </Tag>
+        </Style>
+        <a href="/aboutReadability" target="_blank"><QuestionCircleTwoTone /></a>
       </div>
       <QRCodeWrapper>
         <QRCodeStyled>

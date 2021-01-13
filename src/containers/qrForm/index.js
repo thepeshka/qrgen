@@ -8,6 +8,7 @@ import {
   isBrowser,
   isMobile
 } from "react-device-detect";
+import Constants from "../../constants";
 
 const {Option} = Select;
 
@@ -16,15 +17,12 @@ const filtersMap = {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   },
-  phone: e => {
+  number: e => {
     if (e.charCode) {
       const char = String.fromCharCode(e.charCode)
-      if (e.target.value.length) {
-        return /\d/.test(char);
-      }
-      return char === '+' || /\d/.test(char);
+      return /\d/.test(char);
     }
-    return /\+?\d*/.test(e.target.value);
+    return /\d*/.test(e.target.value);
   }
 };
 
@@ -76,15 +74,15 @@ const fieldMap = {
         open={false}
       />
     </Form.Item>),
-  phone: (formData, formState, {id, title, showIf = () => true}) => (
+  number: (formData, formState, {id, title, showIf = () => true}) => (
     showIf(formState) && <Form.Item name={id} label={title}>
       <Input
         maxLength={100}
         style={{width: "100%"}}
-        onKeyPress={e => !filtersMap.phone(e) && e.preventDefault()}
-        onPaste={e => !filtersMap.phone(e) && e.preventDefault()}
+        onKeyPress={e => !filtersMap.number(e) && e.preventDefault()}
+        onPaste={e => !filtersMap.number(e) && e.preventDefault()}
       />
-    </Form.Item>),
+    </Form.Item>)
 };
 
 const fieldDefaultValueMap = {
@@ -94,7 +92,9 @@ const fieldDefaultValueMap = {
   choices: f => f.choices[0].value,
   boolean: () => false,
   array: () => [],
-  phone: () => ""
+  phone: () => "",
+  number: () => "",
+  email: () => ""
 }
 
 const QRCodeStyled = styled.div`
@@ -108,13 +108,21 @@ const QRCodeStyled = styled.div`
 
 const FormStyled = styled(Form)`
   margin-top: 20px;
-`
+`;
 
 const QRForm = ({formData}) => {
   const {fields, renderer} = formData;
   const [form] = Form.useForm();
   const [state, setState] = useState(Object.fromEntries(fields.map(f => [f.id, fieldDefaultValueMap[f.type](f)])));
   const [showSaveQrModal, setShowQrModal] = useState(false);
+
+  const filterValues = (state) => {
+    return Object.fromEntries(Object.entries(state).map(([field_id, val]) => {
+      const field = formData.fields.find(({id}) => id === field_id);
+      if (field.type !== "array") return [field_id, val];
+      return [field_id, val.filter(getFilter(field.filterType))];
+    }));
+  };
 
   return (<QRGeneratorLayout>
     <Row justify="center">
@@ -123,7 +131,7 @@ const QRForm = ({formData}) => {
           <Col flex="auto">
             <FormStyled
               form={form}
-              onValuesChange={v => setState({...state, ...v})}
+              onValuesChange={v => setState({...state, ...filterValues(v)})}
               initialValues={state}
               labelCol={{span: 8}}
               wrapperCol={{span: 16}}
@@ -132,6 +140,14 @@ const QRForm = ({formData}) => {
                 fields.map((f, k) => <React.Fragment key={k}>{fieldMap[f.type](formData, state, {...f, form})}</React.Fragment>)
               }
             </FormStyled>
+            {Constants.debug && <>
+                <pre>
+                  {JSON.stringify(state, null, 4)}
+                </pre>
+                <pre>
+                  {renderer(state)}
+                </pre>
+              </>}
           </Col>
           {isBrowser && <Col span={3} />}
           <Col flex="200px">
