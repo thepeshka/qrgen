@@ -5,7 +5,7 @@ import QRCode from 'qrcode.react';
 import styled from "styled-components";
 import {grayscaleVal, qrReadabilityLevel, warningTagColor} from "../../utils/color";
 import {QuestionCircleTwoTone} from "@ant-design/icons";
-import Style from "../../componenets/style";
+import Style from "../../components/style";
 
 const Option = Select.Option;
 

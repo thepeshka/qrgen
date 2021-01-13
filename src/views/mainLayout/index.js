@@ -24,7 +24,7 @@ const MainLayout = ({children}) => {
   return (
     <LayoutFullHeightStyled>
       <Header className="header">
-        <div className="logo"><div style={{marginRight: 16}}><img alt="" src={Logo} /></div>QRGen</div>
+        <a href="/"><div className="logo"><div style={{marginRight: 16}}><img alt="" src={Logo} /></div>QRGen</div></a>
       </Header>
       <ContentScrollableStyled style={{padding: "0 50px"}}>
         {children}
