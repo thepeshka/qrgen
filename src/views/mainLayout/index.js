@@ -2,6 +2,7 @@ import { Layout } from 'antd';
 import React from "react";
 import styled from "styled-components";
 import Logo from '../../logo.svg';
+import LanguageSelector from "../../components/languageSelector";
 
 const { Header, Content } = Layout;
 
@@ -20,12 +21,19 @@ const ContentScrollableStyled = styled(Content)`
   overflow-y: auto;
 `;
 
+const HeaderStyled = styled(Header)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const MainLayout = ({children}) => {
   return (
     <LayoutFullHeightStyled>
-      <Header className="header">
+      <HeaderStyled className="header">
         <a href="/"><div className="logo"><div style={{marginRight: 16}}><img alt="" src={Logo} /></div>QRGen</div></a>
-      </Header>
+        <LanguageSelector />
+      </HeaderStyled>
       <ContentScrollableStyled style={{padding: "0 50px"}}>
         {children}
       </ContentScrollableStyled>

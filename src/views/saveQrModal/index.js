@@ -6,6 +6,7 @@ import styled from "styled-components";
 import {grayscaleVal, qrReadabilityLevel, warningTagColor} from "../../utils/color";
 import {QuestionCircleTwoTone} from "@ant-design/icons";
 import Style from "../../components/style";
+import LocaleEntry from "../../components/localeEntry";
 
 const Option = Select.Option;
 
@@ -110,7 +111,7 @@ const SaveQrModal = ({qrData, onClose}) => {
 
   return (
     <Modal
-      title="Save QR code"
+      title={<LocaleEntry>saveQrCodeModal.title</LocaleEntry>}
       visible={true}
       onOk={handleSave}
       onCancel={onClose}
@@ -124,23 +125,23 @@ const SaveQrModal = ({qrData, onClose}) => {
           </Radio.Group>
         </Style>,
         <Button key="back" onClick={onClose}>
-          Cancel
+          <LocaleEntry>saveQrCodeModal.backBtn.caption</LocaleEntry>
         </Button>,
         <Button key="submit" type="primary" onClick={handleSave}>
-          Save
+          <LocaleEntry>saveQrCodeModal.saveBtn.caption</LocaleEntry>
         </Button>,
       ]}
     >
       {(grayscaleVal(qrSettings.fgColor) > grayscaleVal(qrSettings.bgColor)) &&
         <Alert
           style={{marginBottom: 20}}
-          message="Some scanners may not be able to scan QR codes with dark background!"
+          message={<LocaleEntry>saveQrCodeModal.readabilityLevel.alert.message</LocaleEntry>}
           type="warning"
           showIcon
         />
       }
       <div>
-        Readability level: <Style width={70} textAlign="center">
+        <LocaleEntry>saveQrCodeModal.readabilityLevel.label</LocaleEntry>: <Style width={70} textAlign="center">
           <Tag color={warningTagColor(readabilityLevel)}>
               {readabilityLevel.toFixed(2)}%
           </Tag>
@@ -159,19 +160,19 @@ const SaveQrModal = ({qrData, onClose}) => {
         labelCol={{span: 8}}
         wrapperCol={{span: 16}}
       >
-        <Form.Item name="size" label="Size">
+        <Form.Item name="size" label={<LocaleEntry>saveQrCodeModal.form.size.label</LocaleEntry>}>
           <InputNumber />
         </Form.Item>
         <Form.Item name="includeMargin" valuePropName="checked" wrapperCol={{offset: 8, span: 16}}>
-          <Checkbox>Margin</Checkbox>
+          <Checkbox><LocaleEntry>saveQrCodeModal.form.includeMargin.label</LocaleEntry></Checkbox>
         </Form.Item>
-        <Form.Item label="Foreground Color">
+        <Form.Item label={<LocaleEntry>saveQrCodeModal.form.fgColor.label</LocaleEntry>}>
           <CompactPicker color={qrSettings.fgColor} onChange={c => setQrSettings({...qrSettings, fgColor: c.hex})}/>
         </Form.Item>
-        <Form.Item label="Background Color">
+        <Form.Item label={<LocaleEntry>saveQrCodeModal.form.bgColor.label</LocaleEntry>}>
           <CompactPicker color={qrSettings.bgColor} onChange={c => setQrSettings({...qrSettings, bgColor: c.hex})}/>
         </Form.Item>
-        <Form.Item name="level" label="Error correction level">
+        <Form.Item name="level" label={<LocaleEntry>saveQrCodeModal.form.level.label</LocaleEntry>}>
           <Select onChange={v => form.setFieldsValue({level: v})}>
             <Option default value="L">L</Option>
             <Option value="M">M</Option>

@@ -1,3 +1,5 @@
+import Lang from './lang';
+
 const escapeQr = (txt, chars = '\\;,:') => {
   Array.from(chars).forEach(c => txt.replace(c, '\\' + c));
   return txt;
@@ -10,45 +12,45 @@ const protoUrl = (proto, path, args) => {
 
 const FormsData = {
   text: {
-    name: "Text",
+    name: Lang["text.name"],
     fields: [
       {
         type: "textArea",
-        title: "Text",
+        title: Lang["text.text.title"],
         id: "text"
       }
     ],
     renderer: ({text}) => text
   },
   email: {
-    name: "Email",
+    name: Lang["email.name"],
     fields: [
       {
         type: "array",
-        title: "To",
+        title: Lang["email.to.title"],
         id: "to",
         filterType: "email"
       },
       {
         type: "array",
-        title: "Cc",
+        title: Lang["email.cc.title"],
         id: "cc",
         filterType: "email"
       },
       {
         type: "array",
-        title: "Bcc",
+        title: Lang["email.bcc.title"],
         id: "bcc",
         filterType: "email"
       },
       {
         type: "text",
-        title: "Subject",
+        title: Lang["email.subject.title"],
         id: "subject",
       },
       {
         type: "textArea",
-        title: "Body",
+        title: Lang["email.body.title"],
         id: "body"
       },
     ],
@@ -64,80 +66,80 @@ const FormsData = {
     )
   },
   phone: {
-    name: "Phone",
+    name: Lang["phone.name"],
     fields: [
       {
         id: "phone",
         type: "text",
-        title: "Number"
+        title: Lang["phone.phone.title"]
       }
     ],
     renderer: ({phone}) => `tel:+${phone}`
   },
   wifi: {
-    name: "Wi-Fi",
+    name: Lang["wifi.name"],
     fields: [
       {
         id: "auth",
         type: "choices",
-        title: "Authentication",
+        title: Lang["wifi.auth.title"],
         choices: [
-          {value: "nopass", caption: "None"},
-          {value: "WEP", caption: "WEP"},
-          {value: "WPA", caption: "WPA"},
-          {value: "WPA2", caption: "WPA2"},
-          {value: "WPA2-EAP", caption: "WPA2-EAP"}
+          {value: "nopass", caption: Lang["wifi.auth.choices.nopass.caption"]},
+          {value: "WEP", caption: Lang["wifi.auth.choices.WEP.caption"]},
+          {value: "WPA", caption: Lang["wifi.auth.choices.WPA.caption"]},
+          {value: "WPA2", caption: Lang["wifi.auth.choices.WPA2.caption"]},
+          {value: "WPA2-EAP", caption: Lang["wifi.auth.choices.WPA2-EAP.caption"]}
         ]
       },
       {
         id: "ssid",
         type: "text",
-        title: "SSID (network name)"
+        title: Lang["wifi.ssid.title"]
       },
       {
         id: "password",
         type: "password",
-        title: "Password",
+        title: Lang["wifi.password.title"],
         showIf: ({auth}) => auth !== "nopass"
       },
       {
         id: "eapMethod",
         type: "choices",
-        title: "EAP method",
+        title: Lang["wifi.eapMethod.title"],
         choices: [
-          {value: "PWD", caption: "PWD"},
-          {value: "TTLS", caption: "TTLS"}
+          {value: "PWD", caption: Lang["wifi.eapMethod.choices.PWD.caption"]},
+          {value: "TTLS", caption: Lang["wifi.eapMethod.choices.TTLS.caption"]}
         ],
         showIf: ({auth}) => auth === "WPA2-EAP"
       },
       {
         id: "identity",
         type: "text",
-        title: "Identity",
+        title: Lang["wifi.identity.title"],
         showIf: ({auth}) => auth === "WPA2-EAP"
       },
       {
         id: "anonIdentity",
         type: "text",
-        title: "Anonymous identity",
+        title: Lang["wifi.anonIdentity.title"],
         showIf: ({auth, eapMethod}) => auth === "WPA2-EAP" && eapMethod === "TTLS"
       },
       {
         id: "phase2",
         type: "choices",
-        title: "Phase 2 method",
+        title: Lang["wifi.phase2.title"],
         choices: [
-          {value: "PAP", caption: "PAP"},
-          {value: "MSCHAP", caption: "MSCHAP"},
-          {value: "MSCHAPV2", caption: "MSCHAPV2"},
-          {value: "GTC", caption: "GTC"},
+          {value: "PAP", caption: Lang["wifi.phase2.choices.PAP.caption"]},
+          {value: "MSCHAP", caption: Lang["wifi.phase2.choices.MSCHAP.caption"]},
+          {value: "MSCHAPV2", caption: Lang["wifi.phase2.choices.MSCHAPV2.caption"]},
+          {value: "GTC", caption: Lang["wifi.phase2.choices.GTC.caption"]},
         ],
         showIf: ({auth, eapMethod}) => auth === "WPA2-EAP" && eapMethod === "TTLS"
       },
       {
         id: "hidden",
         type: "boolean",
-        title: "Hidden"
+        title: Lang["wifi.hidden.title"]
       },
     ],
     renderer: ({ssid, auth, password, hidden, eapMethod, anonIdentity, identity, phase2}) => {
@@ -159,72 +161,72 @@ const FormsData = {
     }
   },
   vcard: {
-    name: "Contact",
+    name: Lang["vcard.name"],
     fields: [
       {
         id: "name",
         type: "text",
-        title: "Last name"
+        title: Lang["vcard.name.title"]
       },
       {
         id: "fname",
         type: "text",
-        title: "First name"
+        title: Lang["vcard.fname.title"]
       },
       {
         id: "org",
         type: "text",
-        title: "Organization"
+        title: Lang["vcard.org.title"]
       },
       {
         id: "email",
         type: "text",
-        title: "Email"
+        title: Lang["vcard.email.title"]
       },
       {
         id: "url",
         type: "text",
-        title: "Website"
+        title: Lang["vcard.url.title"]
       },
       {
         id: "cell",
         type: "text",
-        title: "Cell"
+        title: Lang["vcard.cell.title"]
       },
       {
         id: "phone",
         type: "text",
-        title: "Phone"
+        title: Lang["vcard.phone.title"]
       },
       {
         id: "fax",
         type: "text",
-        title: "Fax"
+        title: Lang["vcard.fax.title"]
       },
       {
         id: "street",
         type: "text",
-        title: "Street"
+        title: Lang["vcard.street.title"]
       },
       {
         id: "city",
         type: "text",
-        title: "City"
+        title: Lang["vcard.city.title"]
       },
       {
         id: "region",
         type: "text",
-        title: "Region"
+        title: Lang["vcard.region.title"]
       },
       {
         id: "postcode",
         type: "text",
-        title: "Postcode"
+        title: Lang["vcard.postcode.title"]
       },
       {
         id: "country",
         type: "text",
-        title: "Country"
+        title: Lang["vcard.country.title"]
       },
     ],
     renderer: ({name, fname, org, email, url, cell, phone, fax, street, city, region, postcode, country}) => {
@@ -241,21 +243,21 @@ const FormsData = {
     }
   },
   custom: {
-    name: "Custom protocol",
+    name: Lang["custom.name"],
     fields: [
       {
         type: "text",
-        title: "Protocol",
+        title: Lang["custom.proto.title"],
         id: "proto",
       },
       {
         type: "text",
-        title: "Path",
+        title: Lang["custom.path.title"],
         id: "path",
       },
       {
         type: "array",
-        title: "Arguments",
+        title: Lang["custom.args.title"],
         id: "args"
       }
     ],

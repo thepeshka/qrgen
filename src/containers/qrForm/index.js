@@ -9,6 +9,7 @@ import {
   isMobile
 } from "react-device-detect";
 import Constants from "../../constants";
+import LocaleEntry from "../../components/localeEntry";
 
 const {Option} = Select;
 
@@ -154,7 +155,9 @@ const QRForm = ({formData}) => {
             <QRCodeStyled>
               <QRCode id="qr" includeMargin={true} value={renderer(state).slice(0, 23648)} size={200} />
             </QRCodeStyled>
-            <Button type="primary" block onClick={() => setShowQrModal(true)}>Save</Button>
+            <Button type="primary" block onClick={() => setShowQrModal(true)}>
+              <LocaleEntry>qrForm.saveQrBtn.caption</LocaleEntry>
+            </Button>
             {showSaveQrModal && <SaveQrModal
               qrData={renderer(state).slice(0, 23648)}
               onClose={() => setShowQrModal(false)}
