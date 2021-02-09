@@ -34,7 +34,17 @@ const QRCodeWrapper = styled.div`
   flex-direction: column;
 `;
 
-const SaveQrModal = ({qrData, onClose}) => {
+const FooterStyled = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const SaveQrFormStyled = styled.div`
+
+`;
+
+const SaveQRFormStandalone = () => {
   const [qrSettings, setQrSettings] = useState({
     size: 200,
     includeMargin: true,
@@ -84,7 +94,6 @@ const SaveQrModal = ({qrData, onClose}) => {
     canvas.toBlob(function(blob) {
       downloadBlob(blob, `qrgen_${Date.now()}.${imgFormat}`);
     }, mimetype, 1);
-    onClose();
   }
 
   const saveSvg = () => {
@@ -119,47 +128,26 @@ const SaveQrModal = ({qrData, onClose}) => {
   };
 
   return (
-    <Modal
-      title={<LocaleEntry>saveQrCodeModal.title</LocaleEntry>}
-      visible={true}
-      onOk={handleSave}
-      onCancel={onClose}
-      okText="Save"
-      footer={[
-        <Style position="absolute" left={16} bottom={15}>
-          <Radio.Group value={imgFormat} onChange={e => setImgFormat(e.target.value)}>
-            <Radio value="png">PNG</Radio>
-            <Radio value="jpg">JPG</Radio>
-            <Radio value="svg">SVG</Radio>
-          </Radio.Group>
-        </Style>,
-        <Button key="back" onClick={onClose}>
-          <LocaleEntry>saveQrCodeModal.backBtn.caption</LocaleEntry>
-        </Button>,
-        <Button key="submit" type="primary" onClick={handleSave}>
-          <LocaleEntry>saveQrCodeModal.saveBtn.caption</LocaleEntry>
-        </Button>,
-      ]}
-    >
+    <SaveQrFormStyled>
       {(grayscaleVal(qrSettings.fgColor) > grayscaleVal(qrSettings.bgColor)) &&
-        <Alert
-          style={{marginBottom: 20}}
-          message={<LocaleEntry>saveQrCodeModal.readabilityLevel.alert.message</LocaleEntry>}
-          type="warning"
-          showIcon
-        />
+      <Alert
+        style={{marginBottom: 20}}
+        message={<LocaleEntry>saveQrCodeModal.readabilityLevel.alert.message</LocaleEntry>}
+        type="warning"
+        showIcon
+      />
       }
       <div>
         <LocaleEntry>saveQrCodeModal.readabilityLevel.label</LocaleEntry>: <Style width={70} textAlign="center">
-          <Tag color={warningTagColor(readabilityLevel)}>
-              {readabilityLevel.toFixed(2)}%
-          </Tag>
-        </Style>
+        <Tag color={warningTagColor(readabilityLevel)}>
+          {readabilityLevel.toFixed(2)}%
+        </Tag>
+      </Style>
         <a href="/aboutReadability" target="_blank"><QuestionCircleTwoTone /></a>
       </div>
       <QRCodeWrapper>
         <QRCodeStyled>
-          <QRCode id="qrCode" value={qrData} {...qrCodeProps}/>
+          <QRCode id="qrCode" value={atob(window.location.hash.slice(1))} {...qrCodeProps}/>
         </QRCodeStyled>
       </QRCodeWrapper>
       <Form
@@ -203,8 +191,18 @@ const SaveQrModal = ({qrData, onClose}) => {
           </Form.Item>
         </If>
       </Form>
-    </Modal>
+      <FooterStyled>
+        <Radio.Group value={imgFormat} onChange={e => setImgFormat(e.target.value)}>
+          <Radio value="png">PNG</Radio>
+          <Radio value="jpg">JPG</Radio>
+          <Radio value="svg">SVG</Radio>
+        </Radio.Group>
+        <Button key="submit" type="primary" onClick={handleSave}>
+          <LocaleEntry>saveQrCodeModal.saveBtn.caption</LocaleEntry>
+        </Button>
+      </FooterStyled>
+    </SaveQrFormStyled>
   );
 };
 
-export default SaveQrModal;
+export default SaveQRFormStandalone;

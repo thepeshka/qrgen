@@ -9,25 +9,29 @@ import {
 } from "react-router-dom";
 import FormsData from "./formsData";
 import AboutReadabilityPage from "./pages/aboutReadability";
+import SaveQRFormStandalone from "./views/saveQrFormStandalone";
 
 function App() {
   return (
     <Router>
-      <MainLayout>
-        <Switch>
-          <Route exact path="/">
-            <QRForm formData={FormsData.text} />
-          </Route>
-          {Object.entries(FormsData).map(([key, form], i) =>
-            <Route key={key} exact path={"/" + key}>
-              <QRForm formData={form} />
+      <Switch>
+        <Route exact path="/data">
+          <SaveQRFormStandalone />
+        </Route>
+        <MainLayout>
+            <Route exact path="/">
+              <QRForm formData={FormsData.text} />
             </Route>
-          )}
-          <Route exact path="/aboutReadability">
-            <AboutReadabilityPage />
-          </Route>
-        </Switch>
-      </MainLayout>
+            {Object.entries(FormsData).map(([key, form], i) =>
+              <Route key={key} exact path={"/" + key}>
+                <QRForm formData={form} />
+              </Route>
+            )}
+            <Route exact path="/aboutReadability">
+              <AboutReadabilityPage />
+            </Route>
+        </MainLayout>
+      </Switch>
     </Router>
   );
 }

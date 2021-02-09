@@ -52,6 +52,7 @@ const QRGeneratorLayout = ({children}) => {
             <Radio.Button
               value={key}
               onClick={() => redirect(key)}
+              key={key}
             >{form.name}</Radio.Button>
           )}
         </Radio.Group>

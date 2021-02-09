@@ -10,8 +10,8 @@ const LanguageSelector = () => (
     optionLabelProp="label"
     onChange={v => {localStorage.setItem("lang", v); window.location.reload()}}
   >
-    {Object.values(Languages).map((lang) => (
-      <Select.Option value={lang.id} label={lang.flag}>
+    {Object.values(Languages).map((lang, k) => (
+      <Select.Option value={lang.id} label={lang.flag} key={k}>
         {lang.flag} {lang["name.local"]}
       </Select.Option>
     ))}
