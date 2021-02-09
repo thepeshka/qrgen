@@ -1,0 +1,26 @@
+* {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#ext {
+  width: 400px;
+  height: 600px;
+}
+
+#extbody, #frame {
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+#extbody {
+  padding: 20px;
+}
+
+html {
+  overflow-x: hidden;
+}
